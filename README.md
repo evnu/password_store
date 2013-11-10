@@ -12,13 +12,18 @@ having to cover the passwords with the fingers.
 1. Create a Password Storage File
 
     $./store.sh -f passwords.pgp -i evnu -n
+                ^                 ^       ^--- create a new file
+                |                 |----------- encrypted with this public key id
+                |----------------------------- and store it here
 
-2. Store a Password for User Foo
+2. Store a Password
 
     $./store.sh -f passwords.pgp -i evnu -s Foo
+                                          ^--- store for user Foo
 
-3. Retrieve Password for User Foo
+3. Retrieve a Password
 
     $./store.sh -f passwords.pgp -i evnu -r Foo
+                                         ^---- retrieve for user Foo
 
 This will write the password to stdout! (I said this is not meant to be secure.)
