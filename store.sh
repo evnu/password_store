@@ -46,7 +46,8 @@ if [ $ACTIONS -gt 1 ]; then
     exit -3
 fi
 
-PREAMBLE="#PASSWORDFILE" # mark the begin of a password file
+PREAMBLE="#PASSWORDFILE" 
+SEP=":::::"
 
 #
 # Create a new password file
@@ -54,7 +55,9 @@ PREAMBLE="#PASSWORDFILE" # mark the begin of a password file
 if [ x$NEW == x1 ]; then
     # GPG will ask if we want to overwrite an existing file. This would also allow
     # the user to change the filename.
-    echo $PREAMBLE| gpg --recipient $ID -e --output $PWFILE
+    $(
+        echo $PREAMBLE| gpg --recipient $ID -e --output $PWFILE
+    )
 fi
 
 #
@@ -62,23 +65,24 @@ fi
 #
 if [ x$STORE != x ]; then
     echo "enter the password"
-    read -r PASSWORD
-    entry="$STORE::$PASSWORD"
-    ### Obey the sed magic! If the substitute fails, write a new entry;otherwise,
-    ### overwrite.
-    RESULT=$(gpg -d $PWFILE |\
-        # cut the gpg-agent preamble
-        sed -r "$PREAMBLE/;dt" |\
-        sed -r "s/^$STORE.*$/$entry/;t;s/^/$entry/" $PWFILE)
-    gpg -o $PWFILE --recipient $ID -e <(cat <<_
+    read -s -r password
+    entry="${STORE}${SEP}$password"
+    # sed: delete previous user entries (if any), add new entry
+    RESULT=$(gpg -d $PWFILE 2>/dev/null |\
+                sed "/^${STORE}${SEP}.*$/d;1a $entry")
+    # GPG fucks up my shell; run the command in a subshell
+    $(gpg -o $PWFILE --recipient $ID -e <<_
 $RESULT
-_)
+_
+    )
+    echo done
 fi
 
 #
 # Retrieve a password
 #
 if [ x$RETRIEVE != x ]; then
-    gpg -d $PWFILE |\
-        grep $RETRIEVE
+    gpg -d $PWFILE 2>/dev/null |\
+        grep $RETRIEVE |\
+        awk -F"$SEP" '{print $2;}'
 fi
