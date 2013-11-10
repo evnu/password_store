@@ -56,7 +56,7 @@ if [ x$NEW == x1 ]; then
     # GPG will ask if we want to overwrite an existing file. This would also allow
     # the user to change the filename.
     $(
-        echo $PREAMBLE| gpg --recipient $ID -e --output $PWFILE
+        echo $PREAMBLE| gpg --recipient $ID -se --output $PWFILE
     )
 fi
 
@@ -71,7 +71,7 @@ if [ x$STORE != x ]; then
     RESULT=$(gpg -d $PWFILE 2>/dev/null |\
                 sed "/^${STORE}${SEP}.*$/d;1a $entry")
     # GPG fucks up my shell; run the command in a subshell
-    $(gpg -o $PWFILE --recipient $ID -e <<_
+    $(gpg -o $PWFILE --recipient $ID -se <<_
 $RESULT
 _
     )
