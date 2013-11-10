@@ -55,9 +55,7 @@ SEP=":::::"
 if [ x$NEW == x1 ]; then
     # GPG will ask if we want to overwrite an existing file. This would also allow
     # the user to change the filename.
-    $(
-        echo $PREAMBLE| gpg --recipient $ID -se --output $PWFILE
-    )
+    $(echo $PREAMBLE| gpg --recipient $ID -se --output $PWFILE)
 fi
 
 #
