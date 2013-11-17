@@ -7,22 +7,21 @@ simple interface. This can be useful when configuration files allow to evaluate 
 password from a script. With this, one can show configurtion files to friends without
 having to cover the passwords with the fingers.
 
-
 # Usage
 
-1. Create a Password Storage File
+## Create a Password Storage File
 
     $./store.sh -f passwords.pgp -i evnu -n
                 ^                 ^       ^--- create a new file
                 |                 |----------- encrypted with this public key id
                 |----------------------------- and store it here
 
-2. Store a Password
+## Store a Password
 
     $./store.sh -f passwords.pgp -i evnu -s Foo
                                           ^--- store for user Foo
 
-3. Retrieve a Password
+## Retrieve a Password
 
     $./store.sh -f passwords.pgp -i evnu -r Foo
                                          ^---- retrieve for user Foo
