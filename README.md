@@ -1,4 +1,5 @@
-# A Very Simple Password Manager
+password_store
+==============
 
 This is a simple password manager using GPG to encrypt/decrypt a file which stores
 passwords in plain text. It is not meant to be very secure, but instead is focused on a
@@ -7,7 +8,7 @@ password from a script. With this, one can show configurtion files to friends wi
 having to cover the passwords with the fingers.
 
 
-## Usage
+# Usage
 
 1. Create a Password Storage File
 
